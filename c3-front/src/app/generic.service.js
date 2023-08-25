@@ -57,6 +57,10 @@
           return `${firstSymbol}${queryParams.join('&')}`;
         }
 
+        fun.getReserveFilter = function (filter) {
+          console.log(filter)
+        }
+
    return fun
 
   }

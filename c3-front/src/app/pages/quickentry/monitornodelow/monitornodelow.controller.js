@@ -5,11 +5,12 @@
         .module('openc3')
         .controller('MonitorNodeLowController', MonitorNodeLowController);
 
-    function MonitorNodeLowController($state, $http, $uibModal, treeService, ngTableParams, $scope, $injector, $timeout) {
+    function MonitorNodeLowController($state, $http, $uibModal, treeService, ngTableParams, $scope, $injector, $timeout,genericService) {
 
         var vm = this;
         vm.treeid = $state.params.treeid;
         var toastr = toastr || $injector.get('toastr');
+        vm.getReserveFilter = genericService.getReserveFilter
 
         vm.lowUtilizationList = [   // 低利用率Tab列表
           {
@@ -18,7 +19,8 @@
           },
         ]
         vm.tabThead = ['lowstatus', '服务树'];
-        vm.checkOwnerStatus = true
+        // vm.checkOwnerStatus = true
+        vm.checkOwnerStatus = false
         sessionStorage.setItem('tableFilter', JSON.stringify({}))
         $scope.countOptions = [20, 30,50, 100, 500]
         $scope.selectTab = vm.lowUtilizationList[0];
@@ -603,6 +605,7 @@
     $scope.$watch(function () { return vm.dataTable.filter() }, function (value) {
       if  (value && Object.values(value).length > 0) {
         sessionStorage.setItem('tableFilter', JSON.stringify(value))
+        vm.getReserveFilter(sessionStorage.getItem('tableFilter'))
         vm.handleReverseChange()
       }
     }, true);
